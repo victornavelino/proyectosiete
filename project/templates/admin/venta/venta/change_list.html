@@ -1,0 +1,23 @@
+{% extends "admin/change_list.html" %}
+
+
+{% block footer  %}
+ 
+    <h1>  F2 - AÑADIR VENTA </h1>
+    
+    <script type="text/javascript">
+       // django.jQuery = jQuery;
+        jQuery(document).ready(function () {
+        //jQuery( function() {
+            jQuery(document).on('keydown', function(event) {
+                //F2 agregar venta
+                if(event.keyCode==113){
+                    event.preventDefault();
+                    window.location.href = "/admin/venta/venta/add/"
+                }
+            });
+        });
+    </script>
+
+
+{% endblock %}
