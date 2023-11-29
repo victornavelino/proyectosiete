@@ -55,12 +55,14 @@ class MovimientoArticulo(models.Model):
         verbose_name = 'Movimiento de articulo'
         verbose_name_plural = 'Movimientos de articulos'
 
-    articulo_deposito = models.ForeignKey(ArticuloDeposito, on_delete=models.CASCADE, verbose_name='Articulo en Deposito')
+    articulo = models.CharField(max_length=100, default='', verbose_name='Articulo') 
+    deposito = models.CharField(max_length=100, default='', verbose_name='Deposito')
+    sucursal = models.CharField(max_length=100, default='', verbose_name='Sucursal')
     cantidad = models.IntegerField(null=False)
     fecha = models.DateTimeField(auto_now_add=True)
     tipo = models.CharField(max_length=10, choices=[('entrada', 'Entrada'), ('salida', 'Salida')])
-    usuario = models.ForeignKey(Usuario, null=False, on_delete=models.PROTECT, verbose_name='Usuario')
+    usuario = models.CharField(max_length=50, default='', verbose_name='Usuario')
 
     def __str__(self):
-        return f"{self.tipo} de {self.cantidad} unidades de {self.ArticuloDeposito} el {self.fecha}"
+        return f"{self.tipo} de {self.cantidad} unidades de {self.articulo} el {self.fecha}"
     

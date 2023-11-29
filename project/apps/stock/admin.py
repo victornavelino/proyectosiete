@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from stock.models import Deposito, ArticuloSucursal
+from stock.models import Deposito, ArticuloSucursal, MovimientoArticulo, ArticuloDeposito
 
-# Register your models here.
+
 @admin.register(Deposito)
 class DepositoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'domicilio',)
@@ -14,4 +14,18 @@ class DepositoAdmin(admin.ModelAdmin):
 class ArticuloSucursalAdmin(admin.ModelAdmin):
     list_display = ('articulo', 'sucursal','cantidad')
     search_fields = ('articulo',)
+    list_per_page = 30
+
+
+@admin.register(ArticuloDeposito)
+class ArticuloDepositoAdmin(admin.ModelAdmin):
+    list_display = ('articulo', 'deposito','cantidad')
+    search_fields = ('articulo',)
+    list_per_page = 30
+
+
+@admin.register(MovimientoArticulo)
+class MovimientoArticuloAdmin(admin.ModelAdmin):
+    list_display = ('articulo', 'deposito','sucursal','cantidad', 'fecha', 'tipo', 'usuario')
+    search_fields = ('articulo', 'deposito',)
     list_per_page = 30
