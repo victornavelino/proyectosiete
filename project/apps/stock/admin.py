@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from stock.forms import MovimientoArticuloForm
 from stock.models import Deposito, ArticuloSucursal, MovimientoArticulo, ArticuloDeposito
 
 
@@ -26,6 +26,13 @@ class ArticuloDepositoAdmin(admin.ModelAdmin):
 
 @admin.register(MovimientoArticulo)
 class MovimientoArticuloAdmin(admin.ModelAdmin):
+    form = MovimientoArticuloForm
     list_display = ('articulo', 'deposito','sucursal','cantidad', 'fecha', 'tipo', 'usuario')
     search_fields = ('articulo', 'deposito',)
     list_per_page = 30
+
+    def save_model(self, request, obj, form, change):
+        # Al guardar, copiar el contenido del campo_texto de la instancia relacionada
+        obj.articulo = obj.articulo_foraneo.nombre
+        obj.articulo_foraneo = None
+        obj.save()

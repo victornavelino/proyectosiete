@@ -54,7 +54,7 @@ class MovimientoArticulo(models.Model):
     class Meta:
         verbose_name = 'Movimiento de articulo'
         verbose_name_plural = 'Movimientos de articulos'
-
+    articulo_foraneo = models.ForeignKey(Articulo,null=True, on_delete=models.CASCADE, verbose_name='Articulo')
     articulo = models.CharField(max_length=100, default='', verbose_name='Articulo') 
     deposito = models.CharField(max_length=100, default='', verbose_name='Deposito')
     sucursal = models.CharField(max_length=100, default='', verbose_name='Sucursal')
