@@ -33,6 +33,6 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         # Al guardar, copiar el contenido del campo_texto de la instancia relacionada
-        obj.articulo = obj.articulo_foraneo.nombre
-        obj.articulo_foraneo = None
+        if form.cleaned_data["articulo_foraneo"]:
+            obj.articulo = form.cleaned_data["articulo_foraneo"].nombre
         obj.save()
