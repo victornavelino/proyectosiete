@@ -35,4 +35,11 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
         # Al guardar, copiar el contenido del campo_texto de la instancia relacionada
         if form.cleaned_data["articulo_foraneo"]:
             obj.articulo = form.cleaned_data["articulo_foraneo"].nombre
+        if form.cleaned_data["deposito_foraneo"]:
+            obj.deposito = form.cleaned_data["deposito_foraneo"].nombre
+        if form.cleaned_data["sucursal_foraneo"]:
+            obj.sucursal = form.cleaned_data["sucursal_foraneo"].nombre
+        if form.cleaned_data["usuario_foraneo"]:
+            obj.usuario = form.cleaned_data["usuario_foraneo"]
         obj.save()
+    
