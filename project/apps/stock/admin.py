@@ -42,4 +42,14 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
         if form.cleaned_data["usuario_foraneo"]:
             obj.usuario = form.cleaned_data["usuario_foraneo"]
         obj.save()
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        form = super(MovimientoArticuloAdmin, self).get_form(request, *args, **kwargs)
+        if obj:
+            print('entro objeto con datos')
+            print(obj.articulo)
+            form.base_fields['articulo_foraneo'].initial = obj.articulo
+        return form
+       
+
     
