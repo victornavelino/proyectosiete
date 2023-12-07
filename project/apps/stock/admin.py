@@ -39,17 +39,27 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
             obj.deposito = form.cleaned_data["deposito_foraneo"].nombre
         if form.cleaned_data["sucursal_foraneo"]:
             obj.sucursal = form.cleaned_data["sucursal_foraneo"].nombre
-        if form.cleaned_data["usuario_foraneo"]:
-            obj.usuario = form.cleaned_data["usuario_foraneo"]
+        if form.cleaned_data["usuario"]:
+            obj.usuario = form.cleaned_data["usuario"]
         obj.save()
 
     def get_form(self, request, obj=None, *args, **kwargs):
         form = super(MovimientoArticuloAdmin, self).get_form(request, *args, **kwargs)
-        if obj:
-            print('entro objeto con datos')
-            print(obj.articulo)
-            form.base_fields['articulo_foraneo'].initial = obj.articulo
+        print(request.user.username)
+        if obj is None:
+            form.base_fields['usuario'].initial = str(request.user.username)
+        else:
+            form.base_fields['usuario'].initial = obj.usuario
+        form.base_fields['usuario'].disabled = True
         return form
-       
+"""   
+    def has_add_permission(self, form):
+        self.readonly_fields=['usuario',]
+        return True
+    
+    def has_change_permission(self, request, obj=None):
+        self.readonly_fields=['usuario',]
+        return True
+"""
 
     

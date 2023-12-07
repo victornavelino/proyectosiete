@@ -23,17 +23,11 @@ class MovimientoArticuloForm(forms.ModelForm):
         label="Sucursal",
         widget=forms.Select()
     )
-    usuario_foraneo = forms.ModelChoiceField(
-        queryset=Usuario.objects.all(),
-        label="Usuario",
-        widget=forms.Select()
-    )
-    texto = forms.CharField()
-    
+
 
     class Meta:
         model = MovimientoArticulo
-        fields = ['articulo_foraneo', 'deposito_foraneo', 'cantidad', 'sucursal_foraneo','usuario_foraneo']
+        fields = ['articulo_foraneo', 'deposito_foraneo', 'cantidad', 'sucursal_foraneo','usuario', 'tipo']
     
     def _init_(self, *args, **kwargs):
         super(MovimientoArticuloForm, self)._init_(*args, **kwargs)
