@@ -28,7 +28,13 @@ class MovimientoArticuloForm(forms.ModelForm):
         label="Usuario",
         widget=forms.Select()
     )
+    texto = forms.CharField()
+    
 
     class Meta:
         model = MovimientoArticulo
         fields = ['articulo_foraneo', 'deposito_foraneo', 'cantidad', 'sucursal_foraneo','usuario_foraneo']
+    
+    def _init_(self, *args, **kwargs):
+        super(MovimientoArticuloForm, self)._init_(*args, **kwargs)
+        self.fields['articulo_foraneo'].autocomplete=False
