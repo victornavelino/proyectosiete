@@ -65,3 +65,8 @@ class MovimientoArticulo(models.Model):
     def __str__(self):
         return f"{self.tipo} de {self.cantidad} unidades de {self.articulo} el {self.fecha}"
     
+
+#class MovimientoStock(models.Model):
+#    class Meta:
+#        verbose_name = 'Movimiento de Stock'
+#        verbose_name_plural = 'Movimientos de Stock'

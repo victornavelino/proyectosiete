@@ -1,4 +1,5 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from stock.utils import calcular_stock
 from stock.forms import MovimientoArticuloForm
 from stock.models import Deposito, ArticuloSucursal, MovimientoArticulo, ArticuloDeposito
 
@@ -16,6 +17,19 @@ class ArticuloSucursalAdmin(admin.ModelAdmin):
     search_fields = ('articulo',)
     list_per_page = 30
 
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return True
+    
+    def has_delete_permission(self, request, obj=None):
+        return False
+     
+    def save_model(self, request, obj, form, change):
+        messages.error(request, 'No Puede modificar movimientos desde este panel')
+        return False
+
 
 @admin.register(ArticuloDeposito)
 class ArticuloDepositoAdmin(admin.ModelAdmin):
@@ -32,6 +46,7 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
     list_per_page = 30
 
     def save_model(self, request, obj, form, change):
+        
         # Al guardar, copiar el contenido del campo_texto de la instancia relacionada
         if form.cleaned_data["articulo_foraneo"]:
             obj.articulo = form.cleaned_data["articulo_foraneo"].nombre
@@ -41,7 +56,23 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
             obj.sucursal = form.cleaned_data["sucursal_foraneo"].nombre
         if form.cleaned_data["usuario"]:
             obj.usuario = form.cleaned_data["usuario"]
+
+        try:
+
+            articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
+                                                         sucursal=form.cleaned_data["sucursal_foraneo"])
+            articulo_sucursal.cantidad+=obj.cantidad
+            articulo_sucursal.save()
+        except:
+            ArticuloSucursal.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
+                                            sucursal=form.cleaned_data["sucursal_foraneo"],
+                                            cantidad=obj.cantidad)
         obj.save()
+
+        
+
+
+
 
     def get_form(self, request, obj=None, *args, **kwargs):
         form = super(MovimientoArticuloAdmin, self).get_form(request, *args, **kwargs)
