@@ -1,7 +1,7 @@
 from django.contrib import admin, messages
 from stock.utils import calcular_stock
 from stock.forms import MovimientoArticuloForm
-from stock.models import Deposito, ArticuloSucursal, MovimientoArticulo, ArticuloDeposito
+from stock.models import Deposito, ArticuloSucursal, MovimientoArticulo, ArticuloDeposito, MovimientoStock
 
 
 @admin.register(Deposito)
@@ -93,4 +93,9 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
         return True
 """
 
+@admin.register(MovimientoStock)
+class MovimientoStockAdmin(admin.ModelAdmin):
+    list_display = ('objeto_origen', 'cantidad','tipo')
+    search_fields = ('objeto_origen',)
+    list_per_page = 30
     
