@@ -66,7 +66,15 @@ class MovimientoArticulo(models.Model):
         return f"{self.tipo} de {self.cantidad} unidades de {self.articulo} el {self.fecha}"
     
 
-#class MovimientoStock(models.Model):
-#    class Meta:
-#        verbose_name = 'Movimiento de Stock'
-#        verbose_name_plural = 'Movimientos de Stock'
+"""class MovimientoStock(models.Model):
+    class Meta:
+        verbose_name = 'Movimiento de Stock'
+        verbose_name_plural = 'Movimientos de Stock'
+    origen = models.CharField(max_length=10, choices=[('sucursal', 'Sucursal'), ('deposito', 'Deposito')], verbose_name='Origen')
+    destino = models.CharField(max_length=10, choices=[('sucursal', 'Sucursal'), ('deposito', 'Deposito')], verbose_name='Destino')
+    deposito = models.CharField(max_length=100, default='', verbose_name='Deposito')
+    sucursal = models.CharField(max_length=100, default='', verbose_name='Sucursal')
+    cantidad = models.IntegerField(null=False)
+    tipo = models.CharField(max_length=10, choices=[('entrada', 'Entrada'), ('salida', 'Salida')])
+    usuario = models.CharField(max_length=50, default='', verbose_name='Usuario')
+"""
