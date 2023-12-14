@@ -77,10 +77,6 @@ class MovimientoStock(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id_origen = models.PositiveIntegerField()
     objeto_origen = GenericForeignKey('content_type', 'object_id_origen')
-    # Objeto genérico DESTINO
-    object_id_destino= models.PositiveIntegerField()
-    objeto_destino = GenericForeignKey('content_type', 'object_id_destino')
-
     cantidad = models.IntegerField(null=False)
     tipo = models.CharField(max_length=10, choices=[('entrada', 'Entrada'), ('salida', 'Salida')])
     usuario = models.CharField(max_length=50, default='', verbose_name='Usuario')
