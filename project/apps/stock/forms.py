@@ -1,5 +1,6 @@
 
 from django import forms
+from dal import autocomplete
 
 from articulo.models import Articulo
 from empleado.models import Sucursal
@@ -32,3 +33,7 @@ class MovimientoArticuloForm(forms.ModelForm):
     def _init_(self, *args, **kwargs):
         super(MovimientoArticuloForm, self)._init_(*args, **kwargs)
         self.fields['articulo_foraneo'].autocomplete=False
+
+
+class MovimientoStockForm(autocomplete.FutureModelForm):
+    content_object= autocomplete
