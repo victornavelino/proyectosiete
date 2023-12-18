@@ -36,4 +36,11 @@ class MovimientoArticuloForm(forms.ModelForm):
 
 
 class MovimientoStockForm(autocomplete.FutureModelForm):
-    content_object= autocomplete
+    content_object= autocomplete.Select2GenericForeignKeyModelField(
+        model_choice=[(Deposito, 'name'),(Sucursal, 'name')],
+        widget=autocomplete.QuerySetSequenceSelect2,   
+    )
+
+    class Meta:
+        model = MovimientoArticulo
+        fields = ['articulo_foraneo', 'deposito_foraneo', 'cantidad', 'sucursal_foraneo','usuario', 'tipo']
