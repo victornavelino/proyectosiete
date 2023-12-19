@@ -19,6 +19,11 @@ class Deposito(models.Model):
     def __str__(self):
         return f'{self.nombre}'
     
+    @staticmethod
+    def autocomplete_search_fields():
+        return 'nombre',
+
+    
 
 class ArticuloSucursal(models.Model):
     class Meta:
@@ -56,9 +61,13 @@ class MovimientoArticulo(models.Model):
     class Meta:
         verbose_name = 'Movimiento de articulo'
         verbose_name_plural = 'Movimientos de articulos'
+    
+    # Objeto genérico
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
+    # Fin Objeto generico ajaja
     articulo = models.CharField(max_length=100, default='', verbose_name='Articulo') 
-    deposito = models.CharField(max_length=100, default='', verbose_name='Deposito')
-    sucursal = models.CharField(max_length=100, default='', verbose_name='Sucursal')
     cantidad = models.IntegerField(null=False)
     fecha = models.DateTimeField(auto_now_add=True)
     tipo = models.CharField(max_length=10, choices=[('entrada', 'Entrada'), ('salida', 'Salida')])
@@ -73,10 +82,7 @@ class MovimientoStock(models.Model):
         verbose_name = 'Movimiento de Stock'
         verbose_name_plural = 'Movimientos de Stock'
     
-    # Objeto genérico ORIGEN
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id_origen = models.PositiveIntegerField()
-    objeto_origen = GenericForeignKey('content_type', 'object_id_origen')
+
     cantidad = models.IntegerField(null=False)
     tipo = models.CharField(max_length=10, choices=[('entrada', 'Entrada'), ('salida', 'Salida')])
     usuario = models.CharField(max_length=50, default='', verbose_name='Usuario')
