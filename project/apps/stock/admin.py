@@ -51,8 +51,13 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
         content_type_deposito = ContentType.objects.get_for_model(Deposito)
         content_type_sucursal = ContentType.objects.get_for_model(Sucursal)
 
-        obj = content_type_sucursal.get_object_for_this_type(id=obj.lugar_id)
-        print(obj)
+        print(content_type_deposito)
+        print(content_type_sucursal)
+        print('entroo')
+        print(obj.lugar_id)
+        objeto = content_type_deposito.get_object_for_this_type(id=obj.lugar_id)
+        
+        print(objeto)
         return obj
 
 
