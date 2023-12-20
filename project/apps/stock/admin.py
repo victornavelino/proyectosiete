@@ -1,4 +1,6 @@
 from django.contrib import admin, messages
+from django.contrib.contenttypes.models import ContentType
+from empleado.models import Sucursal
 from stock.utils import calcular_stock
 from stock.forms import MovimientoArticuloForm
 from stock.models import Deposito, ArticuloSucursal, MovimientoArticulo, ArticuloDeposito
@@ -41,8 +43,16 @@ class ArticuloDepositoAdmin(admin.ModelAdmin):
 @admin.register(MovimientoArticulo)
 class MovimientoArticuloAdmin(admin.ModelAdmin):
     form = MovimientoArticuloForm
-    list_display = ('lugar', 'articulo', 'cantidad', 'fecha', 'tipo', 'usuario')
+    list_display = ('lugar_descripcion', 'articulo', 'cantidad', 'fecha', 'tipo', 'usuario')
     search_fields = ('articulo',)
     list_per_page = 30
+
+    def lugar_descripcion(self, obj):
+        content_type_deposito = ContentType.objects.get_for_model(Deposito)
+        content_type_sucursal = ContentType.objects.get_for_model(Sucursal)
+
+        obj = content_type_sucursal.get_object_for_this_type(id=obj.lugar_id)
+        print(obj)
+        return obj
 
 
