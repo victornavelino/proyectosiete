@@ -58,9 +58,9 @@ class MovimientoArticulo(models.Model):
         verbose_name_plural = 'Movimientos de articulos'
     
     # Objeto genérico
-    lugar = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
-    object_id = models.PositiveIntegerField(null=True, blank=True)
-    content_object = GenericForeignKey('lugar', 'object_id')
+    lugar_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    lugar_object_id = models.PositiveIntegerField(null=True, blank=True)
+    lugar = GenericForeignKey('lugar_type', 'lugar_object_id')
     # Fin Objeto generico ajaja
     articulo = models.CharField(max_length=100, default='', verbose_name='Articulo') 
     cantidad = models.IntegerField(null=False)

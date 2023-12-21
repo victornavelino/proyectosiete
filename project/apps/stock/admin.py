@@ -48,16 +48,20 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
     list_per_page = 30
 
     def lugar_descripcion(self, obj):
+        
         content_type_deposito = ContentType.objects.get_for_model(Deposito)
         content_type_sucursal = ContentType.objects.get_for_model(Sucursal)
 
+        #valor = content_type_deposito.
+        print('valorrrrrrr')
         print(content_type_deposito)
+
         print(content_type_sucursal)
         print('entroo')
         print(obj.lugar_id)
-        objeto = content_type_deposito.get_object_for_this_type(id=obj.lugar_id)
+        objeto = content_type_deposito.get_object_for_this_type(id=1)
         
         print(objeto)
-        return obj
+        return obj.lugar
 
 
