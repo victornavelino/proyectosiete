@@ -1,3 +1,4 @@
+from typing import Any
 from django.contrib import admin, messages
 from django.contrib.contenttypes.models import ContentType
 from empleado.models import Sucursal
@@ -53,4 +54,28 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
         obj_get = ct.get_object_for_this_type(pk=obj.lugar_object_id)
         return obj_get.nombre
 
+
+    def save_model(self, request, obj, form, change):
+        
+        # Al guardar, copiar el contenido del campo_texto de la instancia relacionada
+        if form.cleaned_data["content_object"]:
+            obj.articulo = form.cleaned_data["content_object"].nombre
+        if form.cleaned_data["deposito_foraneo"]:
+            obj.deposito = form.cleaned_data["deposito_foraneo"].nombre
+        if form.cleaned_data["sucursal_foraneo"]:
+            obj.sucursal = form.cleaned_data["sucursal_foraneo"].nombre
+        if form.cleaned_data["usuario"]:
+            obj.usuario = form.cleaned_data["usuario"]
+
+        try:
+
+            articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
+                                                         sucursal=form.cleaned_data["sucursal_foraneo"])
+            articulo_sucursal.cantidad+=obj.cantidad
+            articulo_sucursal.save()
+        except:
+            ArticuloSucursal.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
+                                            sucursal=form.cleaned_data["sucursal_foraneo"],
+                                            cantidad=obj.cantidad)
+        obj.save()
 
