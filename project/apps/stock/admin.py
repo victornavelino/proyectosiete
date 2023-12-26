@@ -43,11 +43,11 @@ class ArticuloDepositoAdmin(admin.ModelAdmin):
 @admin.register(MovimientoArticulo)
 class MovimientoArticuloAdmin(admin.ModelAdmin):
     form = MovimientoArticuloForm
-    list_display = ('lugar_object', 'articulo', 'cantidad', 'fecha', 'tipo', 'usuario')
+    list_display = ('lugar', 'articulo', 'cantidad', 'fecha', 'tipo', 'usuario')
     search_fields = ('articulo',)
     list_per_page = 30
 
-    def lugar_object(self, obj):
+    def lugar(self, obj):
         from django.contrib.contenttypes.models import ContentType
         ct = ContentType.objects.get_for_id(obj.lugar_type.id)
         obj_get = ct.get_object_for_this_type(pk=obj.lugar_object_id)
