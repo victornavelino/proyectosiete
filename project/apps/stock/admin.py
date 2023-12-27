@@ -58,24 +58,19 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         
         # Al guardar, copiar el contenido del campo_texto de la instancia relacionada
-        if form.cleaned_data["content_object"]:
-            obj.articulo = form.cleaned_data["content_object"].nombre
-        if form.cleaned_data["deposito_foraneo"]:
-            obj.deposito = form.cleaned_data["deposito_foraneo"].nombre
-        if form.cleaned_data["sucursal_foraneo"]:
-            obj.sucursal = form.cleaned_data["sucursal_foraneo"].nombre
-        if form.cleaned_data["usuario"]:
-            obj.usuario = form.cleaned_data["usuario"]
-
+        #if form.cleaned_data["content_object"]:
+        #    obj.articulo = form.cleaned_data["content_object"].nombre
+        if form.cleaned_data["articulo_foraneo"]:
+            obj.deposito = form.cleaned_data["articulo_foraneo"].nombre
         try:
 
             articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
-                                                         sucursal=form.cleaned_data["sucursal_foraneo"])
+                                                         sucursal=form.cleaned_data["lugar"])
             articulo_sucursal.cantidad+=obj.cantidad
             articulo_sucursal.save()
         except:
             ArticuloSucursal.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
-                                            sucursal=form.cleaned_data["sucursal_foraneo"],
+                                            sucursal=form.cleaned_data["lugar"],
                                             cantidad=obj.cantidad)
         obj.save()
 

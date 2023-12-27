@@ -16,9 +16,15 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
         required=False,
     )
 
+    articulo_foraneo = forms.ModelChoiceField(
+        queryset=Articulo.objects.all(),
+        label="Articulo",
+        widget=forms.Select()
+    )
+
     class Meta:
         model = MovimientoArticulo
-        fields = ['lugar', 'cantidad','usuario', 'tipo']
+        fields = ['lugar', 'articulo_foraneo', 'cantidad','usuario', 'tipo']
 
     
     def __init__(self, *args, **kwargs):
