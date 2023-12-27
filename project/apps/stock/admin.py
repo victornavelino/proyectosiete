@@ -51,6 +51,8 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
     def lugar(self, obj):
         from django.contrib.contenttypes.models import ContentType
         ct = ContentType.objects.get_for_id(obj.lugar_type.id)
+        print('imprimo contentype')
+        print(ct.model_class)
         obj_get = ct.get_object_for_this_type(pk=obj.lugar_object_id)
         return obj_get.nombre
 
@@ -62,15 +64,28 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
         #    obj.articulo = form.cleaned_data["content_object"].nombre
         if form.cleaned_data["articulo_foraneo"]:
             obj.deposito = form.cleaned_data["articulo_foraneo"].nombre
-        try:
+        if isinstance(obj, Sucursal):
+            print('Sucursalaaaaaaaaaaaa')
+            try:
 
-            articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
+                articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
                                                          sucursal=form.cleaned_data["lugar"])
-            articulo_sucursal.cantidad+=obj.cantidad
-            articulo_sucursal.save()
-        except:
-            ArticuloSucursal.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
+                articulo_sucursal.cantidad+=obj.cantidad
+                articulo_sucursal.save()
+            except:
+                ArticuloSucursal.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
                                             sucursal=form.cleaned_data["lugar"],
                                             cantidad=obj.cantidad)
+        if isinstance(obj, Deposito):
+            print('Depositooooooooooooooo')
+            try:
+                articulo_deposito=ArticuloDeposito.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
+                                                         deposito=form.cleaned_data["lugar"])
+                articulo_deposito.cantidad+=obj.cantidad
+            except:
+                ArticuloDeposito.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
+                                            deposito=form.cleaned_data["lugar"],
+                                            cantidad=obj.cantidad)
+        
         obj.save()
 
