@@ -65,7 +65,7 @@ class MovimientoArticulo(models.Model):
     articulo = models.CharField(max_length=100, default='', verbose_name='Articulo') 
     cantidad = models.IntegerField(null=False)
     fecha = models.DateTimeField(auto_now_add=True)
-    tipo = models.CharField(max_length=10, choices=[('entrada', 'Entrada'), ('salida', 'Salida')])
+    tipo = models.CharField(max_length=10, choices=[('ingreso', 'Ingreso'), ('egreso', 'Egreso')], verbose_name='Tipo de Movimiento')
     usuario = models.CharField(max_length=50, default='', verbose_name='Usuario')
 
     def __str__(self):

@@ -44,7 +44,7 @@ class ArticuloDepositoAdmin(admin.ModelAdmin):
 @admin.register(MovimientoArticulo)
 class MovimientoArticuloAdmin(admin.ModelAdmin):
     form = MovimientoArticuloForm
-    list_display = ('lugar', 'articulo', 'cantidad', 'fecha', 'tipo', 'usuario')
+    list_display = ('lugar', 'articulo', 'cantidad', 'fecha', 'tipo')
     search_fields = ('articulo',)
     list_per_page = 30
 
@@ -57,26 +57,27 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
         return obj_get.nombre
 
     def has_change_permission(self, request, obj=None):
-        return False
+        return True
     
     def has_delete_permission(self, request, obj=None):
-        return False
+        return True
 
     def save_model(self, request, obj, form, change):
         
-        # Al guardar, copiar el contenido del campo_texto de la instancia relacionada
-        #if form.cleaned_data["content_object"]:
-        #    obj.articulo = form.cleaned_data["content_object"].nombre
         if form.cleaned_data["articulo_foraneo"]:
-            obj.deposito = form.cleaned_data["articulo_foraneo"].nombre
+            obj.articulo = form.cleaned_data["articulo_foraneo"].nombre
+        if form.cleaned_data["usuario_foraneo"]:
+            obj.usuario = form.cleaned_data["usuario_foraneo"]
         if isinstance(obj.lugar, Sucursal):
             print('Sucursalaaaaaaaaaaaa')
             try:
 
                 articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
                                                          sucursal=form.cleaned_data["lugar"])
-                                                         
-                articulo_sucursal.cantidad+=obj.cantidad
+                if obj.tipo=='ingreso':                                        
+                    articulo_sucursal.cantidad+=obj.cantidad
+                else:
+                    articulo_sucursal.cantidad-=obj.cantidad
                 articulo_sucursal.save()
             except:
                 ArticuloSucursal.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
@@ -87,7 +88,10 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
             try:
                 articulo_deposito=ArticuloDeposito.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
                                                          deposito=form.cleaned_data["lugar"])
-                articulo_deposito.cantidad+=obj.cantidad
+                if obj.tipo=='ingreso': 
+                    articulo_deposito.cantidad+=obj.cantidad
+                else:
+                    articulo_deposito.cantidad-=obj.cantidad
                 articulo_deposito.save()
             except:
                 ArticuloDeposito.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
