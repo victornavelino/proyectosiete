@@ -44,18 +44,26 @@ class ArticuloDepositoAdmin(admin.ModelAdmin):
 @admin.register(MovimientoArticulo)
 class MovimientoArticuloAdmin(admin.ModelAdmin):
     form = MovimientoArticuloForm
-    list_display = ('lugar', 'articulo', 'cantidad', 'fecha', 'tipo')
+    list_display = ('origen', 'destino', 'articulo', 'cantidad', 'fecha', )
     search_fields = ('articulo',)
     list_per_page = 30
 
-    def lugar(self, obj):
+    def origen(self, obj):
         from django.contrib.contenttypes.models import ContentType
-        ct = ContentType.objects.get_for_id(obj.lugar_type.id)
-        print('imprimo contentype')
+        ct = ContentType.objects.get_for_id(obj.origen_type.id)
+        print('imprimo contentype origen')
         print(ct.model_class)
-        obj_get = ct.get_object_for_this_type(pk=obj.lugar_object_id)
+        obj_get = ct.get_object_for_this_type(pk=obj.origen_object_id)
         return obj_get.nombre
 
+    def destino(self, obj):
+        from django.contrib.contenttypes.models import ContentType
+        ct = ContentType.objects.get_for_id(obj.origen_type.id)
+        print('imprimo contentype destino')
+        print(ct.model_class)
+        obj_get = ct.get_object_for_this_type(pk=obj.destino_object_id)
+        return obj_get.nombre
+    
     def has_change_permission(self, request, obj=None):
         return True
     
@@ -68,23 +76,19 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
             obj.articulo = form.cleaned_data["articulo_foraneo"].nombre
         if form.cleaned_data["usuario_foraneo"]:
             obj.usuario = form.cleaned_data["usuario_foraneo"]
-        if isinstance(obj.lugar, Sucursal):
-            print('Sucursalaaaaaaaaaaaa')
+        if isinstance(obj.origen, Deposito) and isinstance(obj.origen, Sucursal):
             try:
 
                 articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
                                                          sucursal=form.cleaned_data["lugar"])
-                if obj.tipo=='ingreso':                                        
-                    articulo_sucursal.cantidad+=obj.cantidad
-                else:
-                    articulo_sucursal.cantidad-=obj.cantidad
+                articulo_sucursal.cantidad+=obj.cantidad
                 articulo_sucursal.save()
             except:
                 ArticuloSucursal.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
                                             sucursal=form.cleaned_data["lugar"],
                                             cantidad=obj.cantidad)
         if isinstance(obj.lugar, Deposito):
-            print('Depositooooooooooooooo')
+
             try:
                 articulo_deposito=ArticuloDeposito.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
                                                          deposito=form.cleaned_data["lugar"])

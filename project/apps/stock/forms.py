@@ -10,9 +10,16 @@ from usuario.models import Usuario
 
 
 class MovimientoArticuloForm(autocomplete.FutureModelForm):
-    lugar= autocomplete.Select2GenericForeignKeyModelField(
+
+    origen= autocomplete.Select2GenericForeignKeyModelField(
         queryset=QuerySetSequence(Deposito.objects.all(), Sucursal.objects.all()),
-        label='Lugar',
+        label='Origen',
+        required=False,
+    )
+
+    destino= autocomplete.Select2GenericForeignKeyModelField(
+        queryset=QuerySetSequence(Deposito.objects.all(), Sucursal.objects.all()),
+        label='Destino',
         required=False,
     )
 
@@ -30,12 +37,13 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
 
     class Meta:
         model = MovimientoArticulo
-        fields = ['lugar', 'articulo_foraneo', 'cantidad','usuario_foraneo', 'tipo']
+        fields = ['origen','destino', 'articulo_foraneo', 'cantidad','usuario_foraneo']
 
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['lugar'].label_from_instance = self.label_from_instance
+        self.fields['origen'].label_from_instance = self.label_from_instance
+        self.fields['destino'].label_from_instance = self.label_from_instance
 
     def label_from_instance(self, obj):
         # Personaliza cómo se muestra cada objeto en el campo queryset_sequence

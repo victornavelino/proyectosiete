@@ -57,16 +57,20 @@ class MovimientoArticulo(models.Model):
         verbose_name = 'Movimiento de articulo'
         verbose_name_plural = 'Movimientos de articulos'
     
-    # Objeto genérico
-    lugar_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
-    lugar_object_id = models.PositiveIntegerField(null=True, blank=True)
-    lugar = GenericForeignKey('lugar_type', 'lugar_object_id')
-    # Fin Objeto generico ajaja
+    # Objeto genérico ORIGEN
+    origen_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    origen_object_id = models.PositiveIntegerField(null=True, blank=True)
+    origen = GenericForeignKey('origen_type', 'origen_object_id')
+    # Objeto genérico DESTINO
+    #destino_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    destino_object_id = models.PositiveIntegerField(null=True, blank=True)
+    destino = GenericForeignKey('origen_type', 'destino_object_id')
+    
     articulo = models.CharField(max_length=100, default='', verbose_name='Articulo') 
     cantidad = models.IntegerField(null=False)
     fecha = models.DateTimeField(auto_now_add=True)
-    tipo = models.CharField(max_length=10, choices=[('ingreso', 'Ingreso'), ('egreso', 'Egreso')], verbose_name='Tipo de Movimiento')
+    #tipo = models.CharField(max_length=10, choices=[('ingreso', 'Ingreso'), ('egreso', 'Egreso')], verbose_name='Tipo de Movimiento')
     usuario = models.CharField(max_length=50, default='', verbose_name='Usuario')
 
     def __str__(self):
-        return f"{self.tipo} de {self.cantidad} unidades de {self.articulo} el {self.fecha}"
+        return f"{self.cantidad} unidades de {self.articulo} el {self.fecha}"
