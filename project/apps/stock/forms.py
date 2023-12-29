@@ -37,7 +37,7 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
 
     class Meta:
         model = MovimientoArticulo
-        fields = ['origen','destino', 'articulo_foraneo', 'cantidad','usuario_foraneo']
+        fields = ['origen','destino', 'articulo_foraneo', 'cantidad','usuario_foraneo', 'observaciones']
 
     
     def __init__(self, *args, **kwargs):
@@ -48,7 +48,7 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
     def label_from_instance(self, obj):
         # Personaliza cómo se muestra cada objeto en el campo queryset_sequence
         if isinstance(obj, Deposito):
-            return f'DEPOSITO: {obj.nombre}'
+            return f'DEPOSITO - {obj.nombre}'
         elif isinstance(obj, Sucursal):
-            return f'SUCURSAL: {obj.nombre}'
+            return f'SUCURSAL - {obj.nombre}'
         return str(obj)

@@ -71,6 +71,8 @@ class MovimientoArticulo(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     #tipo = models.CharField(max_length=10, choices=[('ingreso', 'Ingreso'), ('egreso', 'Egreso')], verbose_name='Tipo de Movimiento')
     usuario = models.CharField(max_length=50, default='', verbose_name='Usuario')
+    observaciones = models.CharField(max_length=250, default='', verbose_name='Observaciones')
+
 
     def __str__(self):
         return f"{self.cantidad} unidades de {self.articulo} el {self.fecha}"
