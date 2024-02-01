@@ -71,12 +71,34 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
         return True
 
     def save_model(self, request, obj, form, change):
-        
+        print("save_model is called")
+        if obj.origen:
+            print('objeto origen con datos')
+        else:
+            print('objeto vacio')
+            obj.origen_type=None
+            obj.origen_object_id=None
         if form.cleaned_data["articulo_foraneo"]:
             obj.articulo = form.cleaned_data["articulo_foraneo"].nombre
         if form.cleaned_data["usuario_foraneo"]:
             obj.usuario = form.cleaned_data["usuario_foraneo"]
-        if isinstance(obj.origen, Deposito) and isinstance(obj.origen, Sucursal):
+        if form.cleaned_data["origen"]:
+            obj.origen = form.cleaned_data["origen"]
+        if form.cleaned_data["destino"]:
+            obj.destino = form.cleaned_data["destino"]
+        if obj.origen == obj.destino:
+            print('ORIGEN IGUAL A DESTINO')
+            print(obj.origen)
+            print(obj.destino)
+            messages.error(request, 'El Origen y Destino del movimento deben ser diferentes')
+            return False
+        
+        print('IMPRIMO ORIGEN: ', obj.origen)
+        print('IMPRIMO DESTINO: ', obj.destino)
+
+        # CASO MOVIMIENTO DEPOSITO -> SUCURSAL
+        if obj.origen and isinstance(obj.origen, Deposito) and isinstance(obj.destino, Sucursal):
+            print('Entro Deposito a sucursal')
             try:
 
                 articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
@@ -87,8 +109,23 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
                 ArticuloSucursal.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
                                             sucursal=form.cleaned_data["destino"],
                                             cantidad=obj.cantidad)
-        if isinstance(obj.origen, Sucursal) and isinstance(obj.origen, Deposito):
+                
+        #CASO INGRESO DE MERCADERIA A DEPOSITO
+        print('llega al caso: Entro INGRESO DE MERCADERIA a DEPOSITO')
+        #if not obj.origen and isinstance(obj.destino, Deposito):
+            #print('Entro INGRESO DE MERCADERIA a DEPOSITO')
+            #try:
+            #    articulo_deposito=ArticuloDeposito.objects.get(articulo=obj.articulo,
+            #                                             deposito=obj.destino)
+            #    articulo_deposito.cantidad+=obj.cantidad
+            #except:
+            #    ArticuloDeposito.objects.create(articulo=obj.articulo,
+            #                                deposito=obj.destino,
+            #                                cantidad=obj.cantidad)
 
+        # CASO DEVOLUCION DE SUCURSAL -> DEPOSITO
+        if obj.origen and isinstance(obj.origen, Sucursal) and isinstance(obj.destino, Deposito):
+            print('Entro SUCURSAL a DEPOSITO')
             try:
                 articulo_deposito=ArticuloDeposito.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
                                                          deposito=form.cleaned_data["destino"])
