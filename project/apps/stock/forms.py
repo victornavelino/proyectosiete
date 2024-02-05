@@ -57,9 +57,10 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
     def clean_origen(self):
         origen = self.cleaned_data['origen']
         print('imprimo validacion origen')
-        print(origen)
+        #print(origen)
         if not origen:
-            raise ValidationError("Campo origen de ContentType no puede estar vacío.")
+            origen = 'Externo'
+            #raise ValidationError("Campo origen de ContentType no puede estar vacío.")
         return origen  
     
     def __init__(self, *args, **kwargs):
