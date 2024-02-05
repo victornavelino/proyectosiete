@@ -58,7 +58,7 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
 
     def destino(self, obj):
         from django.contrib.contenttypes.models import ContentType
-        ct = ContentType.objects.get_for_id(obj.origen_type.id)
+        ct = ContentType.objects.get_for_id(obj.destino_type.id)
         print('imprimo contentype destino')
         print(ct.model_class)
         obj_get = ct.get_object_for_this_type(pk=obj.destino_object_id)

@@ -21,7 +21,7 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
     destino= autocomplete.Select2GenericForeignKeyModelField(
         queryset=QuerySetSequence(Deposito.objects.all(), Sucursal.objects.all()),
         label='Destino',
-        required=True,
+        required=False,
     )
 
     articulo_foraneo = forms.ModelChoiceField(
