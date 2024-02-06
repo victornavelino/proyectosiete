@@ -13,7 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 class MovimientoArticuloForm(autocomplete.FutureModelForm):
 
     origen= autocomplete.Select2GenericForeignKeyModelField(
-        queryset=QuerySetSequence(Deposito.objects.all(), Sucursal.objects.all()),
+        queryset=QuerySetSequence(Deposito.objects.all(), Sucursal.objects.all(),('Externo')),
         label='Origen',
         required=False,
     )   
