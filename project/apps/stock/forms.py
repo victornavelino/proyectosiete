@@ -21,7 +21,7 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
     destino= autocomplete.Select2GenericForeignKeyModelField(
         queryset=QuerySetSequence(Deposito.objects.all(), Sucursal.objects.all()),
         label='Destino',
-        required=False,
+        required=True,
     )
 
     articulo_foraneo = forms.ModelChoiceField(
@@ -56,11 +56,12 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
 
     def clean_origen(self):
         origen = self.cleaned_data['origen']
-        print('imprimo validacion origen')
-        #print(origen)
-        if not origen:
-            origen = 'Externo'
-            #raise ValidationError("Campo origen de ContentType no puede estar vacío.")
+        print('imprimo validacion origen XD')
+        print('origen' + origen)
+        if origen == '---------':
+            return None
+        #if not origen:
+            #origen = None
         return origen
 
     def clean_destino(self):
