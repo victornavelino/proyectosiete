@@ -13,7 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 class MovimientoArticuloForm(autocomplete.FutureModelForm):
 
     origen= autocomplete.Select2GenericForeignKeyModelField(
-        queryset=QuerySetSequence(Deposito.objects.all(), Sucursal.objects.all(),('Externo')),
+        queryset=QuerySetSequence(Deposito.objects.all(), Sucursal.objects.all()),
         label='Origen',
         required=False,
     )   
@@ -57,7 +57,6 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
     def clean_origen(self):
         origen = self.cleaned_data['origen']
         print('imprimo validacion origen XD')
-        print('origen' + origen)
         if origen == '---------':
             return None
         #if not origen:
