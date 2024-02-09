@@ -45,23 +45,34 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
         origen = cleaned_data.get('origen')
         destino = cleaned_data.get('destino')
 
-        # Validar que al menos uno de los campos de ContentType no esté vacío
-        print('IMPRIMO VALIDACION CLEAN DE FORMULARIO')
-        print(origen)
-        print(destino)
+        #VALIDACIONES
         if not origen and not destino:
-            print('ENTRO IF')
             raise ValidationError("Debes seleccionar al menos un contenido.")
+        
+        if origen==None and isinstance(destino, Sucursal):
+            raise ValidationError('No indico un Deposito de Origen valido, No se realizo la operacion')
+        
+        if origen == destino:
+            print('ORIGEN IGUAL A DESTINO')
+            print(origen)
+            print(destino)
+            raise ValidationError('El Origen y Destino del movimiento deben ser diferentes')
+
         return cleaned_data
 
     def clean_origen(self):
         origen = self.cleaned_data['origen']
         print('imprimo validacion origen XD')
-        if origen == '---------':
-            return None
-        #if not origen:
-            #origen = None
-        return origen
+        try:
+            if not origen:
+                print('entro not origen')
+                return None
+            else:
+                print('entro origen')
+                return origen
+        except:
+            return origen
+        
 
     def clean_destino(self):
         destino = self.cleaned_data['destino']
