@@ -5,6 +5,7 @@ from queryset_sequence import QuerySetSequence
 from django.core.exceptions import ValidationError
 from articulo.models import Articulo
 from empleado.models import Sucursal
+from project.apps.stock.utils import verificar_minimo_en_deposito, verificar_minimo_en_sucursal
 from stock.models import Deposito, MovimientoArticulo
 from usuario.models import Usuario
 from django.contrib.contenttypes.models import ContentType
@@ -46,23 +47,44 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
         destino = cleaned_data.get('destino')
 
         #VALIDACIONES
+
+        #ORIGEN Y DESTINO VACIO
         if not origen and not destino:
             raise ValidationError("Debes seleccionar al menos un contenido.")
         
+        #ORIGEN VACIO Y DESTINO SUCURSAL
         if origen==None and isinstance(destino, Sucursal):
             raise ValidationError('No indico un Deposito de Origen valido, No se realizo la operacion')
+                
+        #ORIGEN DEPOSITO Y DESTINO DEPOSITO
+        if isinstance(origen, Deposito) and isinstance(destino, Deposito):
+            raise ValidationError('Opción movimiento entre depositos no disponible')
         
+        #ORIGEN SUCURSAL Y DESTINO SUCURSAL
+        if isinstance(origen, Sucursal) and isinstance(destino, Sucursal):
+            raise ValidationError('Opción movimiento entre Sucursales no esta permitido')
+        
+        # ORIGEN IGUAL A DESTINO
         if origen == destino:
             print('ORIGEN IGUAL A DESTINO')
             print(origen)
             print(destino)
             raise ValidationError('El Origen y Destino del movimiento deben ser diferentes')
-
+        
+        #MOVIMIENTO DE DEPOSITO A SUCURSAL MAYOR DEL DISPONIBLE EN DEPOSITO (CANT NEGATIVA EN DEPOSITO)
+        if isinstance(origen, Deposito) and isinstance(destino, Sucursal):
+            if not verificar_minimo_en_deposito(cleaned_data):
+                raise ValidationError('Cantidad insuficiente en deposito para este movimiento')
+            
+        #DEVOLUCION DE SUCURSAL a DEPOSITO MAYOR DEL DISPONIBLE EN SUCURSAL (CANT NEGATIVA EN SUCURSAL)
+        if isinstance(origen, Sucursal) and isinstance(destino, Deposito):
+            if not verificar_minimo_en_sucursal(cleaned_data):
+                raise ValidationError('Cantidad insuficiente en sucursal para este movimiento')
         return cleaned_data
 
     def clean_origen(self):
         origen = self.cleaned_data['origen']
-        print('imprimo validacion origen XD')
+        print('aqui seteamos None en caso de que el origen venga vacio')
         try:
             if not origen:
                 print('entro not origen')

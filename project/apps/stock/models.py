@@ -75,4 +75,4 @@ class MovimientoArticulo(models.Model):
 
 
     def __str__(self):
-        return f"{self.cantidad} unidades de {self.articulo} el {self.fecha}"
+        return f"{self.cantidad} unidades de {self.articulo} el {self.fecha.strftime('%d/%m/%Y %H:%M')}"

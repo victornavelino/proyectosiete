@@ -92,6 +92,7 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
             obj.destino = form.cleaned_data["destino"]
         
         #VALIDACIONES
+        """
         if obj.origen == obj.destino:
             print('ORIGEN IGUAL A DESTINO')
             print(obj.origen)
@@ -101,8 +102,9 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
         
         if obj.origen==None and isinstance(obj.destino, Sucursal):
             messages.error(request, 'No indico un Deposito de Origen valido, No se realizo la operacion')
-            return False
-        
+            return False 
+        """
+
         print('IMPRIMO ORIGEN: ', obj.origen)
         print('IMPRIMO DESTINO: ', obj.destino)
 
@@ -113,23 +115,31 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
 
                 articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
                                                          sucursal=form.cleaned_data["destino"])
+                #SE INCREMENTA EN CANTIDAD EN SUCURSAL
                 articulo_sucursal.cantidad+=obj.cantidad
                 articulo_sucursal.save()
+
+                articulo_deposito=ArticuloDeposito.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
+                                                               deposito=form.cleaned_data["origen"])
+                #SE DISMINUYE LA MISMA CANTIDAD EN DEPOSITO
+                articulo_deposito.cantidad-=obj.cantidad
+                articulo_deposito.save()
             except:
                 ArticuloSucursal.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
                                             sucursal=form.cleaned_data["destino"],
                                             cantidad=obj.cantidad)
                 
         #CASO INGRESO DE MERCADERIA A DEPOSITO
-        print('llega al caso: Entro INGRESO DE MERCADERIA a DEPOSITO')
         if not obj.origen and isinstance(obj.destino, Deposito):
             print('Entro INGRESO DE MERCADERIA a DEPOSITO')
+            print(obj.destino)
             try:
-                articulo_deposito=ArticuloDeposito.objects.get(articulo=obj.articulo,
+                articulo_deposito=ArticuloDeposito.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
                                                          deposito=obj.destino)
                 articulo_deposito.cantidad+=obj.cantidad
+                articulo_deposito.save()
             except:
-                ArticuloDeposito.objects.create(articulo=obj.articulo,
+                ArticuloDeposito.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
                                             deposito=obj.destino,
                                             cantidad=obj.cantidad)
 
@@ -139,11 +149,15 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
             try:
                 articulo_deposito=ArticuloDeposito.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
                                                          deposito=form.cleaned_data["destino"])
-                if obj.tipo=='ingreso': 
-                    articulo_deposito.cantidad+=obj.cantidad
-                else:
-                    articulo_deposito.cantidad-=obj.cantidad
+                #SE INCREMENTA EN CANTIDAD EN DEPOSITO
+                articulo_deposito.cantidad+=obj.cantidad
                 articulo_deposito.save()
+
+                articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
+                                                         sucursal=form.cleaned_data["origen"])
+                #SE DISMINUYE LA MISMA CANTIDAD EN SUCURSAL
+                articulo_sucursal.cantidad-=obj.cantidad
+                articulo_sucursal.save()
             except:
                 ArticuloDeposito.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
                                             deposito=form.cleaned_data["destino"],
