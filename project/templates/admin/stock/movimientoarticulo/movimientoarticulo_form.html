@@ -1,11 +1,18 @@
 {% extends 'admin/change_form.html' %}
-
+{% load i18n admin_urls static admin_modify %}
 {% block footer  %}
 <script type="text/javascript">
     // django.jQuery = jQuery;
      jQuery(document).ready(function () {
         console.log('funciona')
 
+        // al seleccionar Empleado seteamos su ID
+        jQuery('#id_origen').on('change', function () {
+
+        });
+
      });
  </script>
+ <!-- SWEETALERT -->
+    <script type="text/javascript" src="{% static 'js/sweetalert.min.js' %}"></script>
  {% endblock %}
