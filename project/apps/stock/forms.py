@@ -96,9 +96,6 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
                 print('entro not origen')
                 return None
             else:
-                if isinstance(origen, Deposito):
-                    self.fields['articulo_foraneo'].queryset = ArticuloDeposito.objects.filter(deposito=origen)
-                print('entro origen')
                 return origen
         except:
             return origen

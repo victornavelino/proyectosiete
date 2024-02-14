@@ -47,6 +47,8 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
     list_display = ('origen', 'destino', 'articulo', 'cantidad', 'fecha', 'observaciones')
     search_fields = ('articulo',)
     list_per_page = 30
+    change_form_template = 'admin/stock/movimientoarticulo/movimientoarticulo_form.html'
+
 
     def origen(self, obj):
         from django.contrib.contenttypes.models import ContentType
