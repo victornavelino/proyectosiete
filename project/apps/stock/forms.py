@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from articulo.models import Articulo
 from empleado.models import Sucursal
 from project.apps.stock.utils import verificar_minimo_en_deposito, verificar_minimo_en_sucursal
-from stock.models import Deposito, MovimientoArticulo
+from stock.models import ArticuloDeposito, Deposito, MovimientoArticulo
 from usuario.models import Usuario
 from django.contrib.contenttypes.models import ContentType
 
@@ -26,7 +26,7 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
     )
 
     articulo_foraneo = forms.ModelChoiceField(
-        queryset=Articulo.objects.all(),
+        queryset=None,
         label="Articulo",
         widget=forms.Select()
     )
@@ -41,13 +41,14 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
         model = MovimientoArticulo
         fields = ['origen','destino', 'articulo_foraneo', 'cantidad','usuario_foraneo', 'observaciones']
 
+ 
     def clean(self):
         cleaned_data = super().clean()
         origen = cleaned_data.get('origen')
         destino = cleaned_data.get('destino')
 
         #VALIDACIONES
-
+        
         #ORIGEN Y DESTINO VACIO
         if not origen and not destino:
             raise ValidationError("Debes seleccionar al menos un contenido.")
@@ -71,6 +72,10 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
             print(destino)
             raise ValidationError('El Origen y Destino del movimiento deben ser diferentes')
         
+        # CANTIDAD MENOR QUE CERO
+        if cleaned_data.get('cantidad') < 0:
+            raise ValidationError('El valor de cantidad no puede ser Negativo (<0)')
+        
         #MOVIMIENTO DE DEPOSITO A SUCURSAL MAYOR DEL DISPONIBLE EN DEPOSITO (CANT NEGATIVA EN DEPOSITO)
         if isinstance(origen, Deposito) and isinstance(destino, Sucursal):
             if not verificar_minimo_en_deposito(cleaned_data):
@@ -80,6 +85,7 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
         if isinstance(origen, Sucursal) and isinstance(destino, Deposito):
             if not verificar_minimo_en_sucursal(cleaned_data):
                 raise ValidationError('Cantidad insuficiente en sucursal para este movimiento')
+        
         return cleaned_data
 
     def clean_origen(self):
@@ -90,6 +96,8 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
                 print('entro not origen')
                 return None
             else:
+                if isinstance(origen, Deposito):
+                    self.fields['articulo_foraneo'].queryset = ArticuloDeposito.objects.filter(deposito=origen)
                 print('entro origen')
                 return origen
         except:
@@ -107,6 +115,7 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
         super().__init__(*args, **kwargs)
         self.fields['origen'].label_from_instance = self.label_from_instance
         self.fields['destino'].label_from_instance = self.label_from_instance
+        self.fields['articulo_foraneo'].queryset = Articulo.objects.all()
 
     def label_from_instance(self, obj):
         # Personaliza cómo se muestra cada objeto en el campo queryset_sequence

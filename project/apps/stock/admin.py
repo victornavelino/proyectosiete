@@ -92,21 +92,9 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
             obj.destino = form.cleaned_data["destino"]
         
         #VALIDACIONES
-        """
-        if obj.origen == obj.destino:
-            print('ORIGEN IGUAL A DESTINO')
-            print(obj.origen)
-            print(obj.destino)
-            messages.error(request, 'El Origen y Destino del movimento deben ser diferentes')
-            return False
-        
-        if obj.origen==None and isinstance(obj.destino, Sucursal):
-            messages.error(request, 'No indico un Deposito de Origen valido, No se realizo la operacion')
-            return False 
-        """
-
         print('IMPRIMO ORIGEN: ', obj.origen)
         print('IMPRIMO DESTINO: ', obj.destino)
+
 
         # CASO MOVIMIENTO DEPOSITO -> SUCURSAL
         if obj.origen and isinstance(obj.origen, Deposito) and isinstance(obj.destino, Sucursal):
