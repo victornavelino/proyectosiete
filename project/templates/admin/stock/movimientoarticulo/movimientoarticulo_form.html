@@ -8,6 +8,15 @@
 
         // al seleccionar Empleado seteamos su ID
         jQuery('#id_origen').on('change', function () {
+            let id_origen;
+            jQuery("#id_origen option:selected").each(function () {
+                id_origen = jQuery(this).val();
+                });
+            
+            if (id_origen) {
+                swal(id_origen);
+                //hacer aqui la consulta
+                            }
 
         });
 
