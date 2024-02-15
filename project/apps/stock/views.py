@@ -1,9 +1,11 @@
+from django.http import HttpResponse
 from django.shortcuts import render
-
+import json
+from django.core import serializers
 from stock.models import ArticuloDeposito
 
 # Create your views here.
-def get_valores(request, id_deposito):
+def get_articulos_deposito(request, id_deposito):
     if request.user.is_authenticated:
         print("id deposito que viene del front")
         print(id_deposito)
@@ -17,8 +19,11 @@ def get_valores(request, id_deposito):
                     "deposito": articulo.deposito
                     }
                 results.append(json_valores)
+            data = json.dumps(results)
+        else:
+            json_valores = {'error': 'El Deposito No tiene articulos'}
+            data = json.dumps(json_valores)
         
-        data = json.dumps(json_valores)
     else:
         valores = {}
         data = serializers.serialize('json', valores)

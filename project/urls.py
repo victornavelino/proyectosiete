@@ -25,6 +25,7 @@ from cuentacorriente.views import get_cc_cliente
 from inventario.views import recepcionar_movimiento_ingreso
 
 from project.apps.articulo.views import get_precio_articulo, copiar_precios, copiar_precios_proceso,get_listas_precio_sucursal
+from project.apps.stock.views import get_articulos_deposito
 from project.apps.venta.views import get_listaprecio, imprimir_ticket
 from project.router import router
 from promocion.views import copiar_promos, copiar_promociones, get_promociones_sucursal
