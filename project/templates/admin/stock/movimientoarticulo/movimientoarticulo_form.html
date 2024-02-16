@@ -14,8 +14,30 @@
                 });
             
             if (id_origen) {
-                swal(id_origen);
+                console.log('entro metodo')
                 //hacer aqui la consulta
+                let url_mask = "{% url 'get_articulos_deposito' id_deposito=1234567 %}".replace(/1234567/, id_origen);
+
+                jQuery.ajax({
+                    type: 'GET',
+                    url: url_mask,
+                    success: function (data) {
+                        console.log('entro en la respuesta del backend')
+                        console.log(data.error)
+                        if (data.resultado) {
+
+                               jQuery.each(data, function (key, registro) {
+                                    jQuery("#id_articulo").append('<option value=' + registro.codigo + '>' + registro.codigo+' - '+ registro.articulo + '</option>');
+                                });
+
+                        }
+
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+
+                });
                             }
 
         });
