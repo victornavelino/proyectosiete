@@ -15,7 +15,8 @@ def get_articulos_deposito(request, id_deposito):
             for articulo in articulosdeposito:
                 json_valores = {
                     "id_articulo": str(articulo.pk),
-                    "nombre": articulo.nombre,
+                    "articulo": articulo.nombre,
+                    "cantidad": str(articulo.cantidad),
                     "deposito": articulo.deposito
                     }
                 results.append(json_valores)
@@ -27,5 +28,7 @@ def get_articulos_deposito(request, id_deposito):
     else:
         valores = {}
         data = serializers.serialize('json', valores)
+    print('imprmimos data en formato json')
+    print(data)
     return HttpResponse(data, content_type="application/json")
 

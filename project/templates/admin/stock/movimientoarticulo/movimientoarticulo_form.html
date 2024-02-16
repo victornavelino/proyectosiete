@@ -8,15 +8,17 @@
 
         // al seleccionar Empleado seteamos su ID
         jQuery('#id_origen').on('change', function () {
-            let id_origen;
+            let id_deposito;
+            console.log("entroooooooooooooooooo")
             jQuery("#id_origen option:selected").each(function () {
-                id_origen = jQuery(this).val();
+                id_deposito = jQuery(this).val();
                 });
             
-            if (id_origen) {
-                console.log('entro metodo')
+            if (id_deposito) {
+                console.log('entro metodo con el siguiente id_deposito')
+                console.log(id_deposito)
                 //hacer aqui la consulta
-                let url_mask = "{% url 'get_articulos_deposito' id_deposito=1234567 %}".replace(/1234567/, id_origen);
+                let url_mask = "{% url 'get_articulos_deposito' id_deposito=1234567 %}".replace(/1234567/, id_deposito);
 
                 jQuery.ajax({
                     type: 'GET',
@@ -24,10 +26,11 @@
                     success: function (data) {
                         console.log('entro en la respuesta del backend')
                         console.log(data.error)
-                        if (data.resultado) {
+                        console.log(data)
+                        if (!data.error) {
 
                                jQuery.each(data, function (key, registro) {
-                                    jQuery("#id_articulo").append('<option value=' + registro.codigo + '>' + registro.codigo+' - '+ registro.articulo + '</option>');
+                                    jQuery("#id_articulo_foraneo").append('<option value=' + registro.id_articulo + '>' + registro.articulo+' - Disp: '+ registro.cantidad + '</option>');
                                 });
 
                         }
