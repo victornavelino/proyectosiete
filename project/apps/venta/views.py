@@ -10,10 +10,8 @@ from django.views.generic import ListView, FormView
 from datetime import date
 from wkhtmltopdf.views import PDFTemplateView
 from wkhtmltopdf.views import PDFTemplateResponse
-
-from articulo.models import Precio, ListaPrecio, Articulo
-
 # Create your views here.
+from articulo.models import Precio, ListaPrecio, Articulo
 from caja.models import TarjetaDeCredito, Caja
 from cliente.models import Cliente
 from empleado.models import Empleado

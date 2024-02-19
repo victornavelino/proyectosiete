@@ -80,7 +80,7 @@ urlpatterns = [
                   path('admin/caja/imprimir_cierre_caja/<int:id_caja>', imprimir_cierre_caja,
                        name='imprimir_cierre_caja'),
                   path('admin/caja/imprimir/<int:id_caja>', imprimir_cierre_caja_pdf, name='imprimir_cierre_caja_pdf'),
-                  path('admin/stock/movimientoarticulo/add/get_articulos_deposito/<int:id_deposito>', get_articulos_deposito, name='get_articulos_deposito'),
+                  path('admin/stock/movimientoarticulo/add/get_articulos_deposito/<str:id_deposito>', get_articulos_deposito, name='get_articulos_deposito'),
                   path('admin/', admin.site.urls),
                   path('oauth2/', include((base_urlpatterns, 'oauth2_provider'), namespace='oauth2_provider')),
                   path('auth/', include('rest_framework_social_oauth2.urls')),
