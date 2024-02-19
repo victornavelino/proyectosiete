@@ -27,10 +27,14 @@
                         console.log('entro en la respuesta del backend')
                         console.log(data.error)
                         console.log(data)
-                        if (!data.error) {
-
+                        if (data.id_articulo !="") {
+                            console.log('entro id_articulo')
+                            console.log(data.id_articulo)
+                            jQuery("#id_articulo_foraneo").empty();
                                jQuery.each(data, function (key, registro) {
-                                    jQuery("#id_articulo_foraneo").append('<option value=' + registro.id_articulo + '>' + registro.articulo+' - Disp: '+ registro.cantidad + '</option>');
+                                console.log('entro al each')
+                                console.log(registro.id_articulo)
+                                    jQuery('#id_articulo_foraneo').append('<option value=' + registro.id_articulo + '>' + registro.articulo+' - Disp: '+ registro.cantidad + '</option>');
                                 });
 
                         }

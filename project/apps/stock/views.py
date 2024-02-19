@@ -21,15 +21,15 @@ def get_articulos_deposito(request, id_deposito):
         print(id_objeto)
         obj_get = ct.get_object_for_this_type(pk=id_objeto)
         
-        articulosdeposito = ArticuloDeposito.objects.filter(pk=obj_get.pk)
+        articulosdeposito = ArticuloDeposito.objects.filter(deposito=obj_get)
         if len(articulosdeposito) > 0:
             results = []
             for articulo in articulosdeposito:
                 json_valores = {
                     "id_articulo": str(articulo.pk),
-                    "articulo": articulo.nombre,
+                    "articulo": articulo.articulo.nombre,
                     "cantidad": str(articulo.cantidad),
-                    "deposito": articulo.deposito
+                    "deposito": articulo.deposito.nombre
                     }
                 results.append(json_valores)
             data = json.dumps(results)
