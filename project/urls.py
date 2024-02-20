@@ -25,15 +25,15 @@ from cuentacorriente.views import get_cc_cliente
 from inventario.views import recepcionar_movimiento_ingreso
 
 from project.apps.articulo.views import get_precio_articulo, copiar_precios, copiar_precios_proceso,get_listas_precio_sucursal
-from stock.views import get_articulos_deposito
-from project.apps.venta.views import get_listaprecio, imprimir_ticket
+from project.apps.stock.views import get_articulos_deposito
+from project.apps.venta.views import get_articulos_todos_id_nombre, get_listaprecio, imprimir_ticket
 from project.router import router
 from promocion.views import copiar_promos, copiar_promociones, get_promociones_sucursal
 from usuario.api import RegistroUsuarioAPIView
 from django.conf import settings
 
 from venta.forms import form_dialog_pago
-from venta.views import get_valores, get_articulos, get_articulos_todos, get_clientes, guardar_venta, \
+from project.apps.venta.views import get_valores, get_articulos, get_articulos_todos, get_clientes, guardar_venta, \
     nuevo_pago_efectivo, listar_ventas, get_ventas, cobrar_venta, mostrar_dialog, form_test, get_tarjetas, \
     verificar_cumpleanios, get_empleados
 
@@ -52,6 +52,7 @@ urlpatterns = [
                   path('admin/venta/articulo/<str:articulo_codigo>/<int:cliente_pk>', get_valores, name='get_valores'),
                   path('admin/venta/articulos/<str:articulo>', get_articulos, name='articulos'),
                   path('admin/venta/articulos_todos/', get_articulos_todos, name='articulo_todos'),
+                  path('admin/venta/articulos_todos/', get_articulos_todos_id_nombre, name='get_articulos_todos_id_nombre'),
                   path('admin/venta/clientes/', get_clientes, name='clientes'),
                   path('admin/venta/empleados/', get_empleados, name='empleados'),
                   path('admin/venta/clientes/<int:pk_cliente>', verificar_cumpleanios, name='verificar_cumpleanios'),

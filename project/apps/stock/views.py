@@ -26,7 +26,7 @@ def get_articulos_deposito(request, id_deposito):
                 results = [] 
                 for articulo in articulosdeposito:
                     json_valores = {
-                        "id_articulo": str(articulo.pk),
+                        "id_articulo": str(articulo.articulo.pk),
                         "articulo": articulo.articulo.nombre,
                         "cantidad": str(articulo.cantidad),
                         "deposito": articulo.deposito.nombre

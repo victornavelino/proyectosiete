@@ -171,6 +171,24 @@ def get_articulos_todos(request):
         data = serializers.serialize('json', valores)
     return HttpResponse(data, content_type="application/json")
 
+def get_articulos_todos_id_nombre(request):
+    if request.user.is_authenticated:
+        articulos = Articulo.objects.all()
+        results = []
+        for a in articulos:
+            json_valores = {
+                "id": a.pk,
+                "articulo": a.nombre,
+                "codigo": a.codigo,
+                "es_por_peso": a.es_por_peso
+            }
+            results.append(json_valores)
+        data = json.dumps(results)
+    else:
+        valores = {}
+        data = serializers.serialize('json', valores)
+    return HttpResponse(data, content_type="application/json")
+
 
 def get_clientes(request):
     if request.user.is_authenticated:

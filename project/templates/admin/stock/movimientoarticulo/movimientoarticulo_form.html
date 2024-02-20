@@ -4,6 +4,8 @@
 <script type="text/javascript">
     // django.jQuery = jQuery;
      jQuery(document).ready(function () {
+        var id_articulo = "";
+        var id_deposito = "";
         console.log('funciona')
         validar_id_origen();
         // al seleccionar origen seteamos su ID
@@ -30,14 +32,14 @@
         function cargar_articulos() {
             jQuery("#id_articulo_foraneo").empty();
             jQuery("#id_articulo_foraneo").val(null).trigger("change");
-            let url_mask = "{% url 'articulo_todos' %}";
+            let url_mask = "{% url 'get_articulos_todos_id_nombre' %}";
 
             jQuery.ajax({
                 type: 'GET',
                 url: url_mask,
                 success: function (data) {
                     jQuery.each(data, function (key, registro) {
-                        jQuery("#id_articulo_foraneo").append('<option value=' + registro.codigo + '>' + registro.articulo + '</option>');
+                        jQuery("#id_articulo_foraneo").append('<option value=' + registro.id + '>' + registro.articulo + '</option>');
                     });
                 },
                 error: function (response) {
@@ -57,7 +59,7 @@
                                 }
                     else{
                         // CARGAMOS TODOS LOS ARTICULOS
-                        cargar_articulos();
+                        //cargar_articulos();
                     }
             
             

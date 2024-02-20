@@ -72,6 +72,9 @@ class MovimientoArticuloForm(autocomplete.FutureModelForm):
             print(destino)
             raise ValidationError('El Origen y Destino del movimiento deben ser diferentes')
         
+        # CANTIDAD ES NULO
+        if cleaned_data.get('cantidad') is None:
+            raise ValidationError('El valor de cantidad no puede ser Nulo')
         # CANTIDAD MENOR QUE CERO
         if cleaned_data.get('cantidad') < 0:
             raise ValidationError('El valor de cantidad no puede ser Negativo (<0)')

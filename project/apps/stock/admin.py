@@ -96,6 +96,7 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
         #VALIDACIONES
         print('IMPRIMO ORIGEN: ', obj.origen)
         print('IMPRIMO DESTINO: ', obj.destino)
+        print('IMPRIMO ARTICULO: ', obj.articulo)
 
 
         # CASO MOVIMIENTO DEPOSITO -> SUCURSAL
