@@ -119,6 +119,11 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
                 ArticuloSucursal.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
                                             sucursal=form.cleaned_data["destino"],
                                             cantidad=obj.cantidad)
+                articulo_deposito=ArticuloDeposito.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
+                                                               deposito=form.cleaned_data["origen"])
+                #SE DISMINUYE LA MISMA CANTIDAD EN DEPOSITO
+                articulo_deposito.cantidad-=obj.cantidad
+                articulo_deposito.save()
                 
         #CASO INGRESO DE MERCADERIA A DEPOSITO
         if not obj.origen and isinstance(obj.destino, Deposito):
@@ -153,6 +158,11 @@ class MovimientoArticuloAdmin(admin.ModelAdmin):
                 ArticuloDeposito.objects.create(articulo=form.cleaned_data["articulo_foraneo"],
                                             deposito=form.cleaned_data["destino"],
                                             cantidad=obj.cantidad)
+                articulo_sucursal=ArticuloSucursal.objects.get(articulo=form.cleaned_data["articulo_foraneo"],
+                                                         sucursal=form.cleaned_data["origen"])
+                #SE DISMINUYE LA MISMA CANTIDAD EN SUCURSAL
+                articulo_sucursal.cantidad-=obj.cantidad
+                articulo_sucursal.save()
         
         obj.save()
     
